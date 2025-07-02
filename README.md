@@ -11,7 +11,7 @@ This repository contains two Python scripts to automate the management of table 
 
 To do this, I wrote two scripts:
 
-**generate_table_configs.py**
+**generate_schema_json.py**
 
 - Extracts the current table and column configurations from a given Fivetran connector and saves them as individual JSON files per table.
 
@@ -31,7 +31,7 @@ Install dependencies (if needed):
 ## 🔧 Usage
 1. Generate Table Configurations
 
-`python3 generate_table_configs.py --connection_id <CONNECTION_ID> --folder_name <OUTPUT_FOLDER>`
+`python3 generate_schema_json.py --connection_id <CONNECTION_ID> --folder_name <OUTPUT_FOLDER>`
 
 Arguments:
 
@@ -62,7 +62,7 @@ Example:
   - This is to ensure that the JSON files are up to date
   - After you change the files and before you run apply_table_configs, it may be good to push the changes to Git to ensure you save the schema config you were trying to deploy (because if it doesn't deploy correctly it will be written over)
 - When a SaaS based connection is first created, you can't alter the column configuration until either (1) schema has been retrieved (2) initial sync has started
-  - If you create a new connection and it hasn't had an initial sync yet, the script won't through an error but it won't successfully deploy the column configurations
+  - If you create a new connection and it hasn't had an initial sync yet, the script won't through an error but paste a list of the columns we attepted to edit but were unable to.
  
 
 
