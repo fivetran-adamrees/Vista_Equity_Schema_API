@@ -1,0 +1,8 @@
+{
+  "table": "ide_code_completion_editor_model",
+  "sync_mode": null,
+  "enabled": true,
+  "enabled_patch_settings": false,
+  "supports_columns_config": false,
+  "columns": {}
+}

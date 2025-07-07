@@ -15,11 +15,21 @@ HEADERS = {
 error_table_messages = []
 error_column_messages = []
 
+def reload_schema(connection_id):
+    url = f"https://api.fivetran.com/v1/connections/{connection_id}/schemas/reload"
+    reload_payload = {
+        "exclude_mode": "PRESERVE"
+    }
+    response_payload= requests.post(url, auth=(FIVETRAN_API_KEY, FIVETRAN_API_SECRET), json=reload_payload)
 
 # This function retrieves the schema name for a given Fivetran connection. 
 # GET request fetches schema metadata and returns the name of the first schema
 def get_schema_name(connection_id):
+
+    reload_schema(connection_id)
+
     url = f"{BASE_URL}/connections/{connection_id}/schemas"
+
     response = requests.get(url, headers=HEADERS, auth=(FIVETRAN_API_KEY, FIVETRAN_API_SECRET))
     response.raise_for_status()
     data = response.json()
@@ -75,8 +85,12 @@ def update_column_config(connection_id, schema_name, table_name, table_data):
 
 
 def main(connection_id, folder_path):
+
+    print("main!")
     schema_name = get_schema_name(connection_id)
+    print("schema_name")
     url = f"{BASE_URL}/connections/{connection_id}/schemas/{schema_name}"
+    print(url)
     # create a dict for every table and if it supports columns config
     # check that before running update_column_config
 
@@ -89,6 +103,7 @@ def main(connection_id, folder_path):
                 table_data = json.load(f)
 
             table_name = os.path.splitext(filename)[0]
+           
             
             if table_data.get("enabled_patch_settings"):
                 update_table_config(connection_id, schema_name, table_name, table_data)
@@ -106,6 +121,8 @@ def main(connection_id, folder_path):
 
 
 if __name__ == "__main__":
+
+    print("hello!")
     import argparse
 
     parser = argparse.ArgumentParser(description="Apply table configs to a Fivetran connection from JSON files.")

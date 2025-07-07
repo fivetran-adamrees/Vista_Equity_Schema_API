@@ -26,6 +26,13 @@ def get_table_columns_config(connection_id, schema_name, table_name):
     response.raise_for_status()
     return response.json().get("data", {}).get("columns", {})
 
+def reload_schema(connection_id):
+    url = f"https://api.fivetran.com/v1/connections/{connection_id}/schemas/reload"
+    reload_payload = {
+        "exclude_mode": "PRESERVE"
+    }
+    response_payload= requests.post(url, auth=(FIVETRAN_API_KEY, FIVETRAN_API_SECRET), json=reload_payload)
+    
 # This function generates and stores table configuration JSON files for all tables in a Fivetran connection. 
 # It first retrieves the full schema, then iterates over each table within each schema. 
 # For each table, it constructs a dictionary containing table properties and column configurations (if supported). 
@@ -33,6 +40,9 @@ def get_table_columns_config(connection_id, schema_name, table_name):
 # If column-level configuration is supported, the function populates detailed attributes for each column.
 def save_table_configs(connection_id, folder_name):
     os.makedirs(folder_name, exist_ok=True)
+
+
+    reload_schema(connection_id)
     schema_data = get_connection_schema(connection_id)
     schemas = schema_data.get("data", {}).get("schemas", {})
     

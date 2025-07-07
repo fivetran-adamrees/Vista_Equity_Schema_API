@@ -1,0 +1,8 @@
+{
+  "table": "team_membership",
+  "sync_mode": null,
+  "enabled": true,
+  "enabled_patch_settings": true,
+  "supports_columns_config": false,
+  "columns": {}
+}
